@@ -63,3 +63,29 @@ def create_user():
         db.session.refresh(new_user)
 
     return redirect(f"/users/{new_user.id}")
+
+
+@app.route("/users/<int:user_id>/edit")
+def edit_user_form(user_id):
+    """Display edit user form"""
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template("edit_user.html", user=user)
+
+
+@app.route("/users/<int:user_id>/edit", methods=["POST"])
+def update_user(user_id):
+    """Update an existing user"""
+
+    user = User.query.get_or_404(user_id)
+    image_url = request.form["image-url"]
+    image_url = image_url if image_url else None
+
+    user.first_name = request.form["first-name"]
+    user.last_name = request.form["last-name"]
+    user.image_url = image_url
+
+    db.session.commit()
+
+    return redirect(f"/users/{user.id}")

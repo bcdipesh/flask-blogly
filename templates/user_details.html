@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} | {{user.first_name}}'s details{% endblock %}
+{% block title %} | User details{% endblock %}
 
 {% block content %}
 <div class="container user-details pt-2">
@@ -12,8 +12,8 @@
         {% endif %}
         <div class="card-body">
             <h5>{{user.first_name}} {{user.last_name}}</h5>
-            <a class="btn btn-outline-info" href="/users/edit">Edit</a>
-            <a class="btn btn-outline-danger" href="/users/delete">Delete</a>
+            <a class="btn btn-outline-info" href="/users/{{user.id}}/edit">Edit</a>
+            <a class="btn btn-outline-danger" href="/users/{{user.id}}delete">Delete</a>
         </div>
     </div>
 
