@@ -23,11 +23,18 @@ with app.app_context():
 
 @app.route("/")
 def home_page():
-    """Display home page"""
+    """Redirect to list of users"""
+
+    return redirect("/users")
+
+
+@app.route("/users")
+def display_users():
+    """Display list of users from the DB"""
 
     users = User.query.all()
 
-    return render_template("home.html", users=users)
+    return render_template("users.html", users=users)
 
 
 @app.route("/users/<int:user_id>")
@@ -39,14 +46,14 @@ def show_user_details(user_id):
     return render_template("user_details.html", user=user)
 
 
-@app.route("/users/create")
+@app.route("/users/new")
 def create_user_form():
     """Display create user form page"""
 
     return render_template("create_user.html")
 
 
-@app.route("/users", methods=["POST"])
+@app.route("/users/new", methods=["POST"])
 def create_user():
     """Create and add a new user to the Users DB"""
 
@@ -62,7 +69,7 @@ def create_user():
         db.session.commit()
         db.session.refresh(new_user)
 
-    return redirect(f"/users/{new_user.id}")
+    return redirect("/users")
 
 
 @app.route("/users/<int:user_id>/edit")
@@ -88,4 +95,4 @@ def update_user(user_id):
 
     db.session.commit()
 
-    return redirect(f"/users/{user.id}")
+    return redirect("/users")
