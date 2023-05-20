@@ -30,6 +30,15 @@ def home_page():
     return render_template("home.html", users=users)
 
 
+@app.route("/users/<int:user_id>")
+def show_user_details(user_id):
+    """Display user details page"""
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template("user_details.html", user=user)
+
+
 @app.route("/users/create")
 def create_user_form():
     """Display create user form page"""
