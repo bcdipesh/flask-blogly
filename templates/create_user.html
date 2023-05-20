@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} | Create User{% endblock %}
+
+{% block content %}
+<div class="container create-user pt-2">
+    <h1>Create a user</h1>
+
+    <form action="/users" method="post">
+        <div class="form-group">
+            <label class="col-form-label mt-4" for="first-name">First Name</label>
+            <input class="form-control" type="text" name="first-name" id="first-name"
+                placeholder="Enter user's first name..." required>
+        </div>
+
+        <div class="form-group">
+            <label for="last-name" class="col-form-label mt-4">Last Name</label>
+            <input class="form-control" type="text" name="last-name" id="last-name"
+                placeholder="Enter user's last name..." required>Last Name
+        </div>
+
+        <div class="form-group">
+            <label for="image-url" class="col-form-label mt-4">Image URL</label>
+            <input class="form-control" type="url" name="image-url" id="image-url"
+                placeholder="Enter user's profile picture url...">
+        </div>
+
+        <button class="btn btn-outline-primary mt-4" type="submit">Add</button>
+    </form>
+</div>
+{% endblock %}
