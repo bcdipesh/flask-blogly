@@ -170,3 +170,15 @@ def update_post(post_id):
     db.session.commit()
 
     return redirect(f"/users/{post.user_id}")
+
+
+@app.route("/posts/<int:post_id>/delete")
+def delete_post(post_id):
+    """Delete a specific post"""
+
+    post = Post.query.get_or_404(post_id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f"/users/{post.user_id}")
