@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User
+from models import db, User, Post
 import os
 from dotenv import load_dotenv
 
@@ -27,16 +27,27 @@ class UserViewsTestCase(TestCase):
         """Add sample user"""
 
         user = User(first_name="Test", last_name="User")
+        post = Post(title="Test Post", content="My test content")
 
         with app.app_context():
+            Post.query.delete()
             User.query.delete()
+
             db.session.add(user)
             db.session.commit()
 
             # Refresh the user object to ensure it is still associated with an active session
             db.session.refresh(user)
 
-        self.user_id = user.id
+            post.user_id = user.id
+
+            db.session.add(post)
+            db.session.commit()
+
+            db.session.refresh(post)
+
+        self.user_id = post.user_id
+        self.post_id = post.id
 
     def tearDown(self):
         """Clean up any fouled transaction"""
@@ -78,3 +89,41 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(res.status_code, 200)
             self.assertIn("Test User 2", html)
+
+    def test_create_post_form(self):
+        with app.test_client() as client:
+            res = client.get(f"/users/{self.user_id}/posts/new")
+            html = res.get_data(as_text=True)
+
+            self.assertEqual(res.status_code, 200)
+            self.assertIn("<h1>Add Post for Test User</h1>", html)
+
+    def test_create_post(self):
+        with app.test_client() as client:
+            data = {"title": "Test Post 2", "content": "Test content 2"}
+            res = client.post(
+                f"/users/{self.user_id}/posts/new", data=data, follow_redirects=True
+            )
+            html = res.get_data(as_text=True)
+
+            self.assertEqual(res.status_code, 200)
+            self.assertIn("Test Post 2", html)
+
+    def test_show_post(self):
+        with app.test_client() as client:
+            res = client.get(f"/posts/{self.post_id}")
+            html = res.get_data(as_text=True)
+
+            self.assertEqual(res.status_code, 200)
+            self.assertIn("Test Post", html)
+
+    def test_delete_post(self):
+        with app.test_client() as client:
+            res = client.get(f"/posts/{self.post_id}/delete")
+
+            self.assertEqual(res.status_code, 302)
+            self.assertEqual(res.location, f"/users/{self.user_id}")
+
+            with app.app_context():
+                post = Post.query.get(self.post_id)
+                self.assertIsNone(post)
