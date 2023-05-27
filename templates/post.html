@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} | {{post.title}}{% endblock %}
+
+{% block content %}
+<div class="container post pt-2">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content}}</p>
+            <a class="btn btn-outline-info" href="/posts/{{post.id}}/edit">Edit</a>
+            <a class="btn btn-outline-danger" href="/posts/{{post.id}}/delete">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

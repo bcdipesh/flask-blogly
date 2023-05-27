@@ -135,3 +135,12 @@ def create_post(user_id):
     db.session.commit()
 
     return redirect(f"/users/{user.id}")
+
+
+@app.route("/posts/<int:post_id>")
+def show_post(post_id):
+    """Display a specific post"""
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template("post.html", post=post)
