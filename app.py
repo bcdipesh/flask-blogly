@@ -212,3 +212,27 @@ def create_tag():
     db.session.commit()
 
     return redirect("/tags")
+
+
+@app.route("/tags/<int:tag_id>/edit")
+def edit_tag_form(tag_id):
+    """Show edit form for a tag"""
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    return render_template("edit_tag.html", tag=tag)
+
+
+@app.route("/tags/<int:tag_id>/edit", methods=["POST"])
+def edit_tag(tag_id):
+    """Process edit form, edit tag, and redirects to the tags list"""
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    name = request.form["name"]
+
+    tag.name = name
+
+    db.session.commit()
+
+    return redirect("/tags")
