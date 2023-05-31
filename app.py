@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, request, redirect
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 from dotenv import load_dotenv
 import os
 
@@ -182,3 +182,12 @@ def delete_post(post_id):
     db.session.commit()
 
     return redirect(f"/users/{post.user_id}")
+
+
+@app.route("/tags")
+def display_tags():
+    """Lists all tags, with links to the tag detail page"""
+
+    tags = Tag.query.all()
+
+    return render_template("tags.html", tags=tags)
