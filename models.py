@@ -50,3 +50,35 @@ class Post(db.Model):
         post = self
 
         return f"<Post id={post.id}, title={post.title}, content={post.content}, created_at={post.created_at}>"
+
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    name = db.Column(db.Text, nullable=False, unique=True)
+
+    posts = db.relationship("Post", backref="tags")
+
+    def __repr__(self):
+        """Change the default representation of the object"""
+
+        tag = self
+
+        return f"<Tag id={tag.id}, name={tag.name}>"
+
+
+class PostTag(db.Model):
+    __tablename__ = "post_tag"
+
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
+
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)
+
+    def __repr__(self):
+        """Change the default representation of the object"""
+
+        post_tag = self
+
+        return f"<PostTag post_id={post_tag.post_id}, tag_id={post_tag.tag_id}>"
