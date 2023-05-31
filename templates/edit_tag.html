@@ -7,7 +7,7 @@
     <form action="/tags/{{tag.id}}/edit" method="post">
         <div class="form-group">
             <label class="col-form-label" for="name">Name</label>
-            <input class="form-control" type="text" name="name" id="name" value="{{tag.name}}">
+            <input class="form-control" type="text" name="name" id="name" value="{{tag.name}}" required>
         </div>
 
         <a class="btn btn-outline-info" href="/tags">Cancel</a>
