@@ -191,3 +191,24 @@ def display_tags():
     tags = Tag.query.all()
 
     return render_template("tags.html", tags=tags)
+
+
+@app.route("/tags/new")
+def create_tag_form():
+    """Shows a form to add a new tag"""
+
+    return render_template("create_tag.html")
+
+
+@app.route("/tags/new", methods=["POST"])
+def create_tag():
+    """Process add form, adds, tag and redirect to tag list"""
+
+    name = request.form["name"]
+
+    tag = Tag(name=name)
+
+    db.session.add(tag)
+    db.session.commit()
+
+    return redirect("/tags")
