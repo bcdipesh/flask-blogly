@@ -44,6 +44,8 @@ class Post(db.Model):
 
     user = db.relationship("User", backref="posts")
 
+    tags = db.relationship("PostTag", backref="posts")
+
     def __repr__(self):
         """Change the default representation of the object"""
 
@@ -59,6 +61,8 @@ class Tag(db.Model):
 
     name = db.Column(db.Text, nullable=False, unique=True)
 
+    posts = db.relationship("PostTag", backref="tags")
+
     def __repr__(self):
         """Change the default representation of the object"""
 
@@ -73,8 +77,6 @@ class PostTag(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), primary_key=True)
 
     tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)
-
-    posts = db.relationship("Post", backref="tags")
 
     def __repr__(self):
         """Change the default representation of the object"""

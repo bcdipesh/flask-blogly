@@ -214,6 +214,20 @@ def create_tag():
     return redirect("/tags")
 
 
+@app.route("/tags/<int:tag_id>")
+def tag_details(tag_id):
+    """Show detail about a tag with links to edit form and to delete"""
+
+    tag = Tag.query.get_or_404(tag_id)
+
+    posts = []
+
+    for post in tag.posts:
+        posts.append(db.session.get(Post, post.post_id))
+
+    return render_template("tag_details.html", tag=tag, posts=posts)
+
+
 @app.route("/tags/<int:tag_id>/edit")
 def edit_tag_form(tag_id):
     """Show edit form for a tag"""

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} | Tag Details{% endblock %}
+
+{% block content %}
+<div class="container tag-details pt-2">
+    <h1>{{tag.name}}</h1>
+    <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-outline-info" href="/tags/{{tag.id}}/edit">Edit</a>
+    <a class="btn btn-outline-danger" href="/tags/{{tag.id}}/delete">Delete</a>
+</div>
+{% endblock %}
