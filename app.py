@@ -142,8 +142,12 @@ def show_post(post_id):
     """Display a specific post"""
 
     post = Post.query.get_or_404(post_id)
+    tags = []
 
-    return render_template("post.html", post=post)
+    for tag in post.tags:
+        tags.append(db.session.get(Tag, tag.tag_id))
+
+    return render_template("post.html", post=post, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit")

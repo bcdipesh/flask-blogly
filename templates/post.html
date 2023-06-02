@@ -8,6 +8,12 @@
         <div class="card-body">
             <h5 class="card-title">{{post.title}}</h5>
             <p class="card-text">{{post.content}}</p>
+
+            <p>Tags: {% for tag in tags %}
+                <span class="badge rounded-pill text-bg-primary">{{tag.name}}</span>
+                {% endfor %}
+            </p>
+
             <a class="btn btn-outline-info" href="/posts/{{post.id}}/edit">Edit</a>
             <a class="btn btn-outline-danger" href="/posts/{{post.id}}/delete">Delete</a>
         </div>
