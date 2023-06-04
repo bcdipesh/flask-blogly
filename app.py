@@ -166,8 +166,13 @@ def show_post_form(post_id):
     """Display form to edit a post"""
 
     post = Post.query.get_or_404(post_id)
+    post_tags = []
+    tags = Tag.query.all()
 
-    return render_template("edit_post.html", post=post)
+    for tag in post.tags:
+        post_tags.append(db.session.get(Tag, tag.tag_id).name)
+
+    return render_template("edit_post.html", post=post, post_tags=post_tags, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit", methods=["POST"])
@@ -178,10 +183,25 @@ def update_post(post_id):
 
     title = request.form["title"]
     content = request.form["content"]
+    post_tags = request.form.getlist("tag")
 
     post.title = title
     post.content = content
+    db.session.commit()
 
+    records_to_delete = PostTag.query.filter(PostTag.post_id == post.id).all()
+
+    for record in records_to_delete:
+        db.session.delete(record)
+
+    db.session.commit()
+
+    updated_post_tags = []
+
+    for tag in post_tags:
+        updated_post_tags.append(PostTag(post_id=post.id, tag_id=tag))
+
+    db.session.add_all(updated_post_tags)
     db.session.commit()
 
     return redirect(f"/users/{post.user_id}")
