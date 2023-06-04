@@ -116,8 +116,9 @@ def create_post_form(user_id):
     """Show form to create a post for a user"""
 
     user = User.query.get_or_404(user_id)
+    tags = db.session.query(Tag).all()
 
-    return render_template("create_post.html", user=user)
+    return render_template("create_post.html", user=user, tags=tags)
 
 
 @app.route("/users/<int:user_id>/posts/new", methods=["POST"])
@@ -128,10 +129,20 @@ def create_post(user_id):
 
     title = request.form["title"]
     content = request.form["content"]
+    tags = request.form.getlist("tag")
 
     new_post = Post(title=title, content=content, user_id=user.id)
 
     db.session.add(new_post)
+    db.session.commit()
+
+    post_tags = []
+
+    for tag in tags:
+        post_tag = PostTag(post_id=new_post.id, tag_id=tag)
+        post_tags.append(post_tag)
+
+    db.session.add_all(post_tags)
     db.session.commit()
 
     return redirect(f"/users/{user.id}")
